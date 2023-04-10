@@ -1,0 +1,73 @@
+{% extends 'WebApplication/base.html' %}
+
+{% block content %}
+
+<h2 align="center">แก้ไขข้อมูลอุปกรณ์</h2>
+{% if messages %}
+<div class="alert alert-danger" role="alert">
+    {% for messages in messages %}
+    <h5>{{messages}}</h5>
+    {% endfor%}
+</div>
+{%endif%}
+
+<form method="POST" >
+    {% csrf_token %}
+    <div class="form-group w-50">
+        <label for="name">Tag : {{objects.tag_id}}</label>
+    </div>
+    <div class="form-group w-50">
+        <label for="name">ชื่อ</label>
+        <input type="text" class="form-control" name="tag_name" value="{{objects.tag_name}}"> 
+    </div>
+    <div class="form-group w-50">
+        <label for="status">สถานะ</label>
+        <select class="form-control" id="status" name="status" onchange="statusChange(this)">
+            <option value="{{objects.status}}" selected disabled hidden>{{objects.status}}</option>
+            {% if objects.status == 'อุปกรณ์อยู่' or objects.status == 'อุปกรณ์ไม่อยู่'%}
+                <option value="อุปกรณ์อยู่">อุปกรณ์อยู่</option>
+                <option value="อุปกรณ์ไม่อยู่">อุปกรณ์ไม่อยู่</option>
+                <option id="borrow" value="กำลังดำเนินการ">ขอยืม</option>
+            {% elif objects.status == "กำลังดำเนินการ" %}
+                <option value="อุปกรณ์อยู่">อุปกรณ์อยู่</option>
+                <option value="อุปกรณ์ไม่อยู่">อุปกรณ์ไม่อยู่</option>
+            {% elif objects.status == "ถูกยืม" %}
+                <option value="คืนของ">คืนของ</option>
+            {% elif objects.status == "คืนของ" %}
+                <option value="อุปกรณ์อยู่">อุปกรณ์อยู่</option>
+                <option value="อุปกรณ์ไม่อยู่">อุปกรณ์ไม่อยู่</option>
+            {% endif %}
+          </select>
+        <!-- <input type="text" class="form-control" name="status"value="{{objects.status}}">  -->
+    </div>
+        <div class="form-group w-50" id="id_card" style="display:none;">
+            <label for="name" >เลขบัตรนักศึกษา</label>
+            <input type="text" id="id_ip" class="form-control" name="student_id"> 
+        </div>
+    <br>
+    <input type="submit" value="แก้ไข" class="btn btn-primary">
+    <input type="button" value="ยกเลิก" class="btn btn-primary">
+    <script>
+        function statusChange(nameSelect)
+        {
+            if(nameSelect){
+                admOptionValue = document.getElementById("borrow").value;
+                if(admOptionValue == nameSelect.value){
+                    document.getElementById("id_card").style.display = "block";
+                    document.getElementById("id_ip").required = true;
+                }
+                else{
+                    document.getElementById("id_card").style.display = "none";
+                    document.getElementById("id_ip").required = false;
+
+                }
+            }
+            else{
+                document.getElementById("id_card").style.display = "none";
+                document.getElementById("id_ip").required = false;
+
+            }
+}
+    </script>
+
+{% endblock %}
