@@ -1,3 +1,5 @@
 pip install django-smtp-ssl
 pip install django-cleanup
-pip isntall pythainlp
+pip install pythainlp
+pip install djangorestframework 
+pip install Pillow
